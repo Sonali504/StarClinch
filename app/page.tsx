@@ -1,65 +1,263 @@
-import Image from "next/image";
+"use client";
+import { useState } from "react";
 
 export default function Home() {
+  const categories = [
+    { name: "Singers", image: "/singer1.jpg" },
+    { name: "Dancers", image: "/dancer1.jpg" },
+    { name: "Comedians", image: "/comedian1.jpg" }
+  ];
+
+  const photos = [
+    { type: "round", src: "/singer1.jpg" },
+    { type: "square", src: "/dancer1.jpg" },
+    { type: "round", src: "/comedian1.jpg" },
+    { type: "square", src: "/singer1.jpg" },
+    { type: "square", src: "/dancer1.jpg" },
+    { type: "square", src: "/comedian1.jpg" },
+    { type: "square", src: "/singer1.jpg" },
+    { type: "square", src: "/dancer1.jpg" },
+  ];
+
+  const videos = [
+  { type: "square", src: "/singer1.jpg" },
+  { type: "square", src: "/singer1.jpg" },
+  { type: "square", src: "/singer1.jpg" },
+  ];
+
+  const [index, setIndex] = useState(0);
+  const [pulse, setPulse] = useState(false);
+  const [gradient, setGradient] = useState(false);
+  const [activeTab, setActiveTab] = useState("photos");
+
+  const [sliderIndex, setSliderIndex] = useState(0);
+
+  const handleNext = () => {
+    if (index === categories.length - 1) return;
+
+    setPulse(true);
+    setGradient(true);
+
+    setTimeout(() => setIndex((prev) => prev + 1), 350);
+
+    setTimeout(() => {
+      setPulse(false);
+      setGradient(false);
+    }, 800);
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <>
+
+      {/* ---------------- HERO SECTION ---------------- */}
+      <section className="w-full min-h-screen bg-[#0B0B13] flex items-center justify-center px-6 md:px-16 py-20">
+        <div className="w-full max-w-7xl grid grid-cols-1 md:grid-cols-[70%_30%] items-center">
+
+          {/* LEFT SIDE */}
+          <div className="relative flex flex-col md:flex-row items-center md:items-center justify-center md:justify-start md:pl-24">
+
+            {/* TEXT FOR SMALL SCREEN */}
+            <h1 className="block md:hidden text-white text-5xl font-semibold mb-6">
+              {categories[index].name}
+            </h1>
+
+            {/* CIRCLE */}
+            <div className="relative cursor-pointer" onClick={handleNext}>
+              <div
+                className={`relative 
+                  w-[260px] h-[260px]
+                  sm:w-[350px] sm:h-[350px]
+                  md:w-[600px] md:h-[600px]
+                  rounded-full border-[10px] md:border-[14px] border-pink-500 overflow-hidden
+                  transition-all duration-500 
+                  ${pulse ? "scale-[1.08]" : "scale-100"}`}
+              >
+                <img
+                  key={index}
+                  src={categories[index].image}
+                  className="w-full h-full object-cover rounded-full transition-all duration-500"
+                />
+
+                <div
+                  className={`
+                    absolute inset-0 rounded-full
+                    bg-gradient-to-t from-pink-500/70 to-transparent
+                    transition-all duration-[700ms] ease-out
+                    ${gradient ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"}
+                  `}
+                ></div>
+              </div>
+            </div>
+
+            {/* TEXT FOR DESKTOP */}
+            <h1
+              className={`
+                hidden md:block
+                absolute left-[-10px] top-1/2 -translate-y-1/2 
+                text-white text-7xl font-semibold
+                transition-all duration-500
+                ${pulse ? "opacity-0 translate-x-4" : "opacity-100 translate-x-0"}
+              `}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              {categories[index].name}
+            </h1>
+          </div>
+
+          {/* RIGHT SECTION */}
+          <div className="text-center md:text-left mt-10 md:mt-0">
+            <h2 className="text-white text-4xl sm:text-5xl font-light leading-snug">
+              Choose<br />
+              from <span className="font-bold">100+<br />Categories</span>
+            </h2>
+
+            <button
+              onClick={handleNext}
+              className="mt-6 inline-block text-pink-400 hover:text-pink-300 text-2xl sm:text-3xl"
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              Explore all categories →
+            </button>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      </section>
+
+      {/* =====================  PHOTOS / VIDEOS SECTION  ===================== */}
+    <section className="relative w-full py-20 bg-[#0B0B13] flex flex-col items-center overflow-hidden">
+
+      {/* FULL ARC BACKGROUND */}
+      <div className="
+        absolute 
+        top-[-260px] 
+        left-1/2 
+        -translate-x-1/2
+        w-[150%] 
+        h-[600px] 
+        rounded-b-[100%] 
+        bg-[#05050A] 
+        opacity-60 
+        blur-[90px]
+        pointer-events-none
+      "></div>
+
+      {/* CONTENT WRAPPER */}
+      <div className="w-full max-w-6xl mx-auto flex flex-col items-center z-10">
+
+        {/* TABS */}
+        <div className="flex items-center space-x-4 bg-[#0d0d17] p-2 rounded-full shadow-xl mt-10">
+          <button
+            className={`px-10 py-3 rounded-full text-xl transition-all ${
+              activeTab === "photos"
+                ? "bg-white text-black shadow-md"
+                : "text-white opacity-50"
+            }`}
+            onClick={() => setActiveTab("photos")}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+            Photos
+          </button>
+
+          <button
+            className={`px-10 py-3 rounded-full text-xl transition-all ${
+              activeTab === "videos"
+                ? "bg-white text-black shadow-md"
+                : "text-white opacity-50"
+            }`}
+            onClick={() => setActiveTab("videos")}
+          >
+            Videos
+          </button>
+        </div>
+
+        {/* GRID SECTION */}
+        <div className="mt-16 w-full">
+
+          {/* ================= PHOTOS GRID ================= */}
+          {activeTab === "photos" && (
+            <div
+              className="
+                grid 
+                grid-cols-1 
+                sm:grid-cols-2 
+                md:grid-cols-3 
+                lg:grid-cols-4 
+                gap-10 
+                w-full
+              "
+            >
+              {photos.map((item, idx) => (
+                <div key={idx} className="flex justify-center">
+                  <div
+                    className={`
+                      overflow-hidden shadow-xl 
+                      ${item.type === "round"
+                        ? "w-[220px] h-[220px] rounded-full"
+                        : "w-[220px] h-[220px] rounded-2xl"}
+                    `}
+                  >
+                    <img
+                      src={item.src}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* ================= VIDEOS GRID ================= */}
+          {activeTab === "videos" && (
+            <div
+              className="
+                grid 
+                grid-cols-1 
+                sm:grid-cols-2 
+                lg:grid-cols-3 
+                gap-12 
+                w-full 
+                place-items-center
+              "
+            >
+              {videos.map((item, idx) => (
+                <div key={idx} className="flex justify-center">
+                  <div
+                    className="
+                      w-[280px] 
+                      h-[380px] 
+                      rounded-2xl 
+                      overflow-hidden 
+                      shadow-2xl 
+                      bg-black
+                    "
+                  >
+                    <img
+                      src={item.src}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+        </div>
+        <div className="flex space-x-3 mt-8">
+          {[0, 1, 2].map((i) => (
+            <div
+              key={i}
+              className={`
+                h-[6px] rounded-full transition-all duration-300
+                ${sliderIndex === i 
+                  ? "w-16 bg-white" 
+                  : "w-10 bg-white/20"
+                }
+              `}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          ))}
         </div>
-      </main>
-    </div>
+      </div>
+
+    </section>
+
+
+
+    </>
   );
 }
